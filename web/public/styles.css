@@ -26,7 +26,13 @@
     --radius-xl: 1rem;
     --radius-2xl: 1.5rem;
     --radius-full: 9999px;
+    --safe-area-top: env(safe-area-inset-top, 0px);
     --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 * {
@@ -40,9 +46,9 @@ body {
     background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fef2f2 100%);
     color: var(--color-gray-900);
     min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding-bottom: var(--safe-area-bottom);
+    min-height: 100dvh;
+    overflow: hidden;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -53,14 +59,17 @@ body {
 .chat-app {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - var(--safe-area-bottom));
-    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100%;
     width: 100%;
     margin: 0;
     background: var(--color-white);
     position: relative;
     overflow: hidden;
+    padding-top: var(--safe-area-top);
     padding-bottom: var(--safe-area-bottom);
+    box-sizing: border-box;
 }
 
 /* ============================================
