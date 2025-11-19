@@ -15,6 +15,35 @@ type BackendChatResponse = {
 
 const SESSION_STORAGE_KEY = "appointment-chat-session-id";
 
+const MOBILE_USER_AGENT_REGEX = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
+const updateDeviceProfile = (): boolean => {
+    const nav = navigator.userAgent || navigator.vendor || "";
+    const hasCoarsePointer = typeof window.matchMedia === "function"
+        ? window.matchMedia("(pointer: coarse)").matches
+        : false;
+    const isMobile = hasCoarsePointer || MOBILE_USER_AGENT_REGEX.test(nav);
+    document.documentElement.dataset.device = isMobile ? "mobile" : "desktop";
+    return isMobile;
+};
+
+const initDeviceDetection = () => {
+    let timeoutId: number | undefined;
+
+    const scheduleUpdate = () => {
+        if (timeoutId) {
+            window.clearTimeout(timeoutId);
+        }
+        timeoutId = window.setTimeout(() => {
+            updateDeviceProfile();
+        }, 200);
+    };
+
+    updateDeviceProfile();
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("orientationchange", scheduleUpdate);
+};
+
 const generateSessionId = (): string => {
     if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
         return crypto.randomUUID();
@@ -166,6 +195,8 @@ async function sendMessage() {
         typingIndicator.remove();
     }
 }
+
+initDeviceDetection();
 
 sendButton.addEventListener("click", sendMessage);
 chatInput.addEventListener("keydown", (e) => {

@@ -520,6 +520,32 @@ body {
 }
 
 /* ============================================
+   MOBILE DEVICE ADJUSTMENTS (via data attribute)
+   ============================================ */
+html[data-device="mobile"] body {
+    min-height: auto;
+    height: auto;
+    overflow-y: auto;
+}
+
+html[data-device="mobile"] .chat-app {
+    min-height: auto;
+    height: auto;
+    padding-top: var(--safe-area-top);
+    padding-bottom: calc(0.75rem + var(--safe-area-bottom));
+}
+
+html[data-device="mobile"] .chat-app__container {
+    max-height: calc(60vh - var(--safe-area-bottom));
+    max-height: calc(60dvh - var(--safe-area-bottom));
+}
+
+html[data-device="mobile"] .chat-app__input-container {
+    position: sticky;
+    bottom: 0;
+}
+
+/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 768px) {
