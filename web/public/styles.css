@@ -61,7 +61,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     min-height: 100dvh;
-    height: 90dvh;
+    height: 80dvh;
     width: 100%;
     margin: 0;
     background: var(--color-white);
@@ -376,28 +376,9 @@ body {
     margin-right: 0.5rem;
 }
 
-.typing-indicator::before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 12px 12px 0;
-    border-color: transparent var(--color-white) transparent transparent;
-}
-
+.typing-indicator::before,
 .typing-indicator::after {
-    content: '';
-    position: absolute;
-    left: -9px;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 12px 12px 0;
-    border-color: transparent var(--color-gray-200) transparent transparent;
+    display: none;
 }
 
 .typing-indicator__dot {
