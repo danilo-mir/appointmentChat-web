@@ -61,7 +61,10 @@ body {
     flex-direction: column;
     min-height: calc(100vh - var(--safe-area-bottom));
     min-height: calc(100dvh - var(--safe-area-bottom));
-    height: auto;
+    height: calc(100vh - var(--safe-area-bottom));
+    height: calc(100dvh - var(--safe-area-bottom));
+    max-height: calc(100vh - var(--safe-area-bottom));
+    max-height: calc(100dvh - var(--safe-area-bottom));
     width: 100%;
     margin: 0;
     background: var(--color-white);
@@ -79,7 +82,10 @@ body {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     padding: 0.3rem 1.25rem;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    position: relative;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 10;
 }
 
@@ -438,7 +444,10 @@ body {
     border-top: 2px solid var(--color-gray-200);
     padding: 1rem 1.5rem;
     padding-bottom: calc(1rem + var(--safe-area-bottom));
-    position: relative;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 10;
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
 }
