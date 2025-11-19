@@ -40,7 +40,9 @@ body {
     background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fef2f2 100%);
     color: var(--color-gray-900);
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: var(--safe-area-bottom);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -51,12 +53,14 @@ body {
 .chat-app {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: calc(100vh - var(--safe-area-bottom));
+    height: auto;
     width: 100%;
     margin: 0;
     background: var(--color-white);
     position: relative;
     overflow: hidden;
+    padding-bottom: var(--safe-area-bottom);
 }
 
 /* ============================================
