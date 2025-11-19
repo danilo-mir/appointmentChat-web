@@ -1,2 +1,5 @@
+# Dependências
 node_modules/
+
+# Artefatos de build
 web/dist/
