@@ -1,11 +1,50 @@
-const BACKEND_URL = "http://localhost:8000/chat";
+const BACKEND_URL = "https://appointmentchat.onrender.com/chat/chat";
 
 const chatContainer = document.getElementById("chat-container")!;
 const chatInput = document.getElementById("chat-input") as HTMLInputElement;
 const sendButton = document.getElementById("send-button")!;
 const typingTemplate = document.getElementById("typing-indicator-template") as HTMLTemplateElement;
 
-let messages: { role: string, content: string }[] = [];
+type ChatRole = "user" | "assistant";
+type ChatMessage = { role: ChatRole; content: string };
+type BackendChatResponse = {
+    content?: string;
+    message?: string;
+    error?: string;
+};
+
+const SESSION_STORAGE_KEY = "appointment-chat-session-id";
+
+const generateSessionId = (): string => {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+        return crypto.randomUUID();
+    }
+
+    // Fallback simples para navegadores sem crypto.randomUUID
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+        const random = (Math.random() * 16) | 0;
+        const value = char === "x" ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+};
+
+const getSessionId = (): string => {
+    try {
+        const storedId = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (storedId) {
+            return storedId;
+        }
+
+        const newId = generateSessionId();
+        sessionStorage.setItem(SESSION_STORAGE_KEY, newId);
+        return newId;
+    } catch {
+        // sessionStorage pode não estar disponível em alguns contextos
+        return generateSessionId();
+    }
+};
+
+const chatMessages: ChatMessage[] = [];
 
 // SVG ícones como strings
 const botIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -86,7 +125,7 @@ async function sendMessage() {
     if (!userMessage) return;
 
     // Adiciona a mensagem do usuário
-    messages.push({ role: "user", content: userMessage });
+    chatMessages.push({ role: "user", content: userMessage });
     addMessage("user", userMessage);
     chatInput.value = "";
 
@@ -94,25 +133,37 @@ async function sendMessage() {
     const typingIndicator = showTypingIndicator();
 
     try {
+        const payload = {
+            session_id: getSessionId(),
+            message: userMessage,
+        };
+
         const response = await fetch(BACKEND_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ messages: messages.map(m => ({ role: m.role, content: m.content })) }),
+            body: JSON.stringify(payload),
         });
 
-        const data = await response.json();
-        const assistantMessage = data.content;
+        if (!response.ok) {
+            const errorPayload = await response.text();
+            throw new Error(errorPayload || `Erro HTTP ${response.status}`);
+        }
 
-        // Remove indicador de digitação
-        typingIndicator.remove();
+        const data: BackendChatResponse = await response.json();
+        const assistantMessage = data.content ?? data.message;
 
-        // Adiciona resposta do assistente
-        messages.push({ role: "assistant", content: assistantMessage });
+        if (!assistantMessage) {
+            throw new Error("Resposta inválida do backend.");
+        }
+
+        chatMessages.push({ role: "assistant", content: assistantMessage });
         addMessage("assistant", assistantMessage);
 
     } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        addMessage("assistant", `Erro ao conectar ao backend: ${errorMessage}`);
+    } finally {
         typingIndicator.remove();
-        addMessage("assistant", `Erro ao conectar ao backend: ${err}`);
     }
 }
 

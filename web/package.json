@@ -7,6 +7,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && lite-server"
+    "watch": "tsc --watch",
+    "start": "npm run build && lite-server --config bs-config.json"
   }
 }
