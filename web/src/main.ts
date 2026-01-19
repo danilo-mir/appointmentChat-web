@@ -13,7 +13,7 @@ type BackendChatResponse = {
     error?: string;
 };
 
-const SESSION_STORAGE_KEY = "appointment-chat-session-id";
+let storedId: string | undefined;
 
 const MOBILE_USER_AGENT_REGEX = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
@@ -58,19 +58,13 @@ const generateSessionId = (): string => {
 };
 
 const getSessionId = (): string => {
-    try {
-        const storedId = sessionStorage.getItem(SESSION_STORAGE_KEY);
-        if (storedId) {
-            return storedId;
-        }
-
-        const newId = generateSessionId();
-        sessionStorage.setItem(SESSION_STORAGE_KEY, newId);
-        return newId;
-    } catch {
-        // sessionStorage pode não estar disponível em alguns contextos
-        return generateSessionId();
+    if (storedId) {
+        return storedId;
     }
+
+    const newId = generateSessionId();
+    storedId = newId;
+    return newId;
 };
 
 const chatMessages: ChatMessage[] = [];
