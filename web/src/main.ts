@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://appointmentchat.onrender.com/chat/chat";
+const BACKEND_URL = "/api/chat/chat";
 
 const chatContainer = document.getElementById("chat-container")!;
 const chatInput = document.getElementById("chat-input") as HTMLInputElement;
@@ -99,25 +99,25 @@ function addMessage(role: string, content: string) {
 
     const messageWrapper = document.createElement("div");
     messageWrapper.classList.add("message-wrapper", role);
-    
+
     // Avatar com ícone
     const avatarDiv = document.createElement("div");
     avatarDiv.classList.add("message-wrapper__avatar");
     avatarDiv.classList.add(role === "user" ? "message-wrapper__avatar--user" : "message-wrapper__avatar--bot");
-    
+
     const avatarIcon = document.createElement("div");
     avatarIcon.classList.add("message-wrapper__avatar-icon");
     avatarIcon.innerHTML = role === "user" ? userIconSVG : botIconSVG;
     avatarDiv.appendChild(avatarIcon);
-    
+
     // Mensagem
     const messageDiv = document.createElement("div");
     messageDiv.classList.add("message", role);
     messageDiv.textContent = content;
-    
+
     messageWrapper.appendChild(avatarDiv);
     messageWrapper.appendChild(messageDiv);
-    
+
     chatContainer.appendChild(messageWrapper);
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
@@ -132,18 +132,18 @@ function showTypingIndicator() {
     const typingNode = typingTemplate.content.cloneNode(true) as HTMLElement;
     const container = document.createElement("div");
     container.classList.add("typing-wrapper");
-    
+
     const avatarDiv = document.createElement("div");
     avatarDiv.classList.add("message-wrapper__avatar", "message-wrapper__avatar--bot");
-    
+
     const avatarIcon = document.createElement("div");
     avatarIcon.classList.add("message-wrapper__avatar-icon");
     avatarIcon.innerHTML = botIconSVG;
     avatarDiv.appendChild(avatarIcon);
-    
+
     container.appendChild(avatarDiv);
     container.appendChild(typingNode);
-    
+
     chatContainer.appendChild(container);
     chatContainer.scrollTop = chatContainer.scrollHeight;
     return container;

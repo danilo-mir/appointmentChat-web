@@ -5,7 +5,7 @@ Frontend em TypeScript para um chatbot que simula um paciente e ajuda alunos de 
 ## Estrutura
 - `web/public/`: HTML e CSS estáticos (`index.html`, `styles.css`).
 - `web/src/main.ts`: lógica do chat, integração com o backend e utilidades.
-- `web/bs-config.json`: configurações do `lite-server`.
+- `web/bs-config.js`: configurações do `lite-server`.
 - `web/tsconfig.json`: opções do compilador TypeScript.
 
 ## Pré-requisitos
@@ -31,10 +31,15 @@ npm start
 - `npm start`: executa `build` e sobe o `lite-server` (porta padrão `3000`).
 
 ## Configuração do Backend
-O endpoint do backend é definido na constante `BACKEND_URL` em `web/src/main.ts`. Altere o valor para apontar para o host desejado, por exemplo:
+O backend é acessado por meio do endpoint no arquivo `web/src/main.ts`, esse endpoint será interceptado pelo proxy definido em `web/bs-config.js`, que redirecionará para a URL correta. O endpoint do backend é definido na constante `BACKEND_URL` em `web/src/main.ts`. Altere o valor para apontar para o host desejado, por exemplo:
 
 ```ts
-const BACKEND_URL = "http://localhost:8000/chat/chat";
+const BACKEND_URL = "/api/chat/chat";
+```
+A URL do backend está definida no arquivo `web/bs-config.js`, no atributo target do middleware, por exemplo:
+
+```js
+target: "http://localhost:8000"
 ```
 
 Após ajustar:
