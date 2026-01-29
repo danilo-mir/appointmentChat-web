@@ -24,5 +24,10 @@ module.exports = {
     "./public/**/*.html",
     "./public/**/*.css",
     "./dist/**/*.js"
-  ]
+  ],
+  ghostMode: {
+    clicks: false,
+    forms: false,
+    scroll: false
+  }
 };
